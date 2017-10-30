@@ -1,0 +1,23 @@
+#* @vtlvariable name="om" type="org.nrg.xdat.om.XnatImagesessiondata" *#
+#* @vtlvariable name="link" type="org.apache.turbine.util.template.TemplateLink" *#
+<!-- BEGIN /templates/screens/xnat_imageSessionData/actionsBox/LaunchBenice.vm -->
+<!-- Sequence: 6 -->
+<li class="yuimenuitem hidden" id="beniceLauncher">
+    <a href="javascript:"><div class="ic">&nbsp;</div><div class="ic_spacer">&nbsp;</div>Run RSN_Gen Pipeline</a>
+</li>
+
+<script>
+    jq('#beniceLauncher a').on('click',function(){
+        xmodal.iframe( {src: '/app/template/PipelineLaunchUtil_Benice.vm', footer: false, title: "Launch Benice", width: 700, height: 550 } );
+    });
+
+    jq.getJSON('/data/projects/$project/config/params/customLauncher?format=json')
+            .success(function(data){
+                var useCustomLauncher = data.ResultSet.Result[0].contents;
+                if (useCustomLauncher === "true") {
+                    jq('#beniceLauncher').removeClass('hidden');
+                }
+            })
+</script>
+<!-- END /templates/screens/xnat_imageSessionData/actionsBox/LaunchBenice.vm -->
+

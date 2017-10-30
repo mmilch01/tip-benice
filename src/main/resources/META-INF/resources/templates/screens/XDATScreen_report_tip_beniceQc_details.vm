@@ -1,0 +1,357 @@
+<TABLE>
+    <TR><TH align="left"><font face="$ui.sansSerifFonts" size="2">Related Items</font></TH></TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE>
+            </TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_abstractResource_1_NUM_ROWS=$item.getChildItems("tip:beniceQc/in/file").size() - 1)
+                #if($xnat_abstractResource_1_NUM_ROWS>=0)
+                    #foreach($xnat_abstractResource_1_COUNTER in [0..$xnat_abstractResource_1_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>note</th><TD>$!item.getStringProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/note")</TD></TR>
+                                        <TR><th>label</th><TD>$!item.getStringProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/label")</TD></TR>
+                                        <TR><th>file_count</th><TD>$!item.getIntegerProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/file_count")</TD></TR>
+                                        <TR><th>file_size</th><TD>$!item.getProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/file_size")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE><TR><TD>
+                                        #set($xnat_abstractResource_tag_2_NUM_ROWS=$item.getChildItems("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag").size() - 1)
+                                        #if($xnat_abstractResource_tag_2_NUM_ROWS>=0)
+                                            #foreach($xnat_abstractResource_tag_2_COUNTER in [0..$xnat_abstractResource_tag_2_NUM_ROWS])
+                                                <!-- BEGIN tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag[$xnat_abstractResource_tag_2_COUNTER] -->
+                                                <TABLE>
+                                                    <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag[$xnat_abstractResource_tag_2_COUNTER]</font></TH></TR>
+                                                    <TR>
+                                                        <TD align="left" valign="top">
+                                                            <TABLE>
+                                                                <TR><th>tag</th><TD>$!item.getStringProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag[$xnat_abstractResource_tag_2_COUNTER]/tag")</TD></TR>
+                                                                <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag[$xnat_abstractResource_tag_2_COUNTER]/name")</TD></TR>
+                                                            </TABLE>
+                                                        </TD>
+                                                    </TR>
+                                                </TABLE>
+                                                <!-- END tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER]/tags/tag[$xnat_abstractResource_tag_2_COUNTER] -->
+                                            #end
+                                        #end
+                                    </TD></TR></TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/in/file[$xnat_abstractResource_1_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_abstractResource_3_NUM_ROWS=$item.getChildItems("tip:beniceQc/out/file").size() - 1)
+                #if($xnat_abstractResource_3_NUM_ROWS>=0)
+                    #foreach($xnat_abstractResource_3_COUNTER in [0..$xnat_abstractResource_3_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>note</th><TD>$!item.getStringProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/note")</TD></TR>
+                                        <TR><th>label</th><TD>$!item.getStringProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/label")</TD></TR>
+                                        <TR><th>file_count</th><TD>$!item.getIntegerProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/file_count")</TD></TR>
+                                        <TR><th>file_size</th><TD>$!item.getProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/file_size")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE><TR><TD>
+                                        #set($xnat_abstractResource_tag_4_NUM_ROWS=$item.getChildItems("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag").size() - 1)
+                                        #if($xnat_abstractResource_tag_4_NUM_ROWS>=0)
+                                            #foreach($xnat_abstractResource_tag_4_COUNTER in [0..$xnat_abstractResource_tag_4_NUM_ROWS])
+                                                <!-- BEGIN tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag[$xnat_abstractResource_tag_4_COUNTER] -->
+                                                <TABLE>
+                                                    <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag[$xnat_abstractResource_tag_4_COUNTER]</font></TH></TR>
+                                                    <TR>
+                                                        <TD align="left" valign="top">
+                                                            <TABLE>
+                                                                <TR><th>tag</th><TD>$!item.getStringProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag[$xnat_abstractResource_tag_4_COUNTER]/tag")</TD></TR>
+                                                                <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag[$xnat_abstractResource_tag_4_COUNTER]/name")</TD></TR>
+                                                            </TABLE>
+                                                        </TD>
+                                                    </TR>
+                                                </TABLE>
+                                                <!-- END tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER]/tags/tag[$xnat_abstractResource_tag_4_COUNTER] -->
+                                            #end
+                                        #end
+                                    </TD></TR></TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/out/file[$xnat_abstractResource_3_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_addField_5_NUM_ROWS=$item.getChildItems("tip:beniceQc/parameters/addParam").size() - 1)
+                #if($xnat_addField_5_NUM_ROWS>=0)
+                    #foreach($xnat_addField_5_COUNTER in [0..$xnat_addField_5_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/parameters/addParam[$xnat_addField_5_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/parameters/addParam[$xnat_addField_5_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>addField</th><TD>$!item.getStringProperty("tip:beniceQc/parameters/addParam[$xnat_addField_5_COUNTER]/addField")</TD></TR>
+                                        <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/parameters/addParam[$xnat_addField_5_COUNTER]/name")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/parameters/addParam[$xnat_addField_5_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <!-- BEGIN tip:beniceQc/provenance -->
+            <TABLE>
+                <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/provenance</font></TH></TR>
+                <TR>
+                    <TD align="left" valign="top">
+                        <TABLE>
+                        </TABLE>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD align="left" valign="top">
+                        <TABLE><TR><TD>
+                            #if($!item.getChildItems("tip:beniceQc/provenance/processStep"))
+                                #set($prov_processStep_7_NUM_ROWS=$!item.getChildItems("tip:beniceQc/provenance/processStep").size() - 1)
+                                #if($prov_processStep_7_NUM_ROWS>=0)
+                                    #foreach($prov_processStep_7_COUNTER in [0..$prov_processStep_7_NUM_ROWS])
+                                        <!-- BEGIN tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER] -->
+                                        <TABLE>
+                                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]</font></TH></TR>
+                                            <TR>
+                                                <TD align="left" valign="top">
+                                                    <TABLE>
+                                                        <TR><th>program</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/program")</TD></TR>
+                                                        <TR><th>program/version</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/program/version")</TD></TR>
+                                                        <TR><th>program/arguments</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/program/arguments")</TD></TR>
+                                                        <TR><th>timestamp</th><TD>$!item.getProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/timestamp")</TD></TR>
+                                                        <TR><th>cvs</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/cvs")</TD></TR>
+                                                        <TR><th>user</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/user")</TD></TR>
+                                                        <TR><th>machine</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/machine")</TD></TR>
+                                                        <TR><th>platform</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/platform")</TD></TR>
+                                                        <TR><th>platform/version</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/platform/version")</TD></TR>
+                                                        <TR><th>compiler</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/compiler")</TD></TR>
+                                                        <TR><th>compiler/version</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/compiler/version")</TD></TR>
+                                                    </TABLE>
+                                                </TD>
+                                            </TR>
+                                            <TR>
+                                                <TD align="left" valign="top">
+                                                    <TABLE><TR><TD>
+                                                        #set($prov_processStep_library_8_NUM_ROWS=$item.getChildItems("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library").size() - 1)
+                                                        #if($prov_processStep_library_8_NUM_ROWS>=0)
+                                                            #foreach($prov_processStep_library_8_COUNTER in [0..$prov_processStep_library_8_NUM_ROWS])
+                                                                <!-- BEGIN tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library[$prov_processStep_library_8_COUNTER] -->
+                                                                <TABLE>
+                                                                    <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library[$prov_processStep_library_8_COUNTER]</font></TH></TR>
+                                                                    <TR>
+                                                                        <TD align="left" valign="top">
+                                                                            <TABLE>
+                                                                                <TR><th>library</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library[$prov_processStep_library_8_COUNTER]/library")</TD></TR>
+                                                                                <TR><th>version</th><TD>$!item.getStringProperty("tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library[$prov_processStep_library_8_COUNTER]/version")</TD></TR>
+                                                                            </TABLE>
+                                                                        </TD>
+                                                                    </TR>
+                                                                </TABLE>
+                                                                <!-- END tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER]/library[$prov_processStep_library_8_COUNTER] -->
+                                                            #end
+                                                        #end
+                                                    </TD></TR></TABLE>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <!-- END tip:beniceQc/provenance/processStep[$prov_processStep_7_COUNTER] -->
+                                    #end
+                                #end
+                            #end
+
+                        </TD></TR></TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+            <!-- END tip:beniceQc/provenance -->
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_experimentData_share_9_NUM_ROWS=$item.getChildItems("tip:beniceQc/sharing/share").size() - 1)
+                #if($xnat_experimentData_share_9_NUM_ROWS>=0)
+                    #foreach($xnat_experimentData_share_9_COUNTER in [0..$xnat_experimentData_share_9_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>share</th><TD>$!item.getStringProperty("tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]/share")</TD></TR>
+                                        <TR><th>label</th><TD>$!item.getStringProperty("tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]/label")</TD></TR>
+                                        <TR><th>project</th><TD>$!item.getStringProperty("tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]/project")</TD></TR>
+                                        <TR><th>visit</th><TD>$!item.getStringProperty("tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]/visit")</TD></TR>
+                                        <TR><th>protocol</th><TD>$!item.getStringProperty("tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER]/protocol")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/sharing/share[$xnat_experimentData_share_9_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <!-- BEGIN tip:beniceQc/investigator -->
+            <TABLE>
+                <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/investigator</font></TH></TR>
+                <TR>
+                    <TD align="left" valign="top">
+                        <TABLE>
+                            <TR><th>title</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/title")</TD></TR>
+                            <TR><th>firstname</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/firstname")</TD></TR>
+                            <TR><th>lastname</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/lastname")</TD></TR>
+                            <TR><th>institution</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/institution")</TD></TR>
+                            <TR><th>department</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/department")</TD></TR>
+                            <TR><th>email</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/email")</TD></TR>
+                            <TR><th>phone</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/phone")</TD></TR>
+                            <TR><th>ID</th><TD>$!item.getStringProperty("tip:beniceQc/investigator/ID")</TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+            <!-- END tip:beniceQc/investigator -->
+        </TD>
+    </TR>
+
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_abstractResource_12_NUM_ROWS=$item.getChildItems("tip:beniceQc/resources/resource").size() - 1)
+                #if($xnat_abstractResource_12_NUM_ROWS>=0)
+                    #foreach($xnat_abstractResource_12_COUNTER in [0..$xnat_abstractResource_12_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>note</th><TD>$!item.getStringProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/note")</TD></TR>
+                                        <TR><th>label</th><TD>$!item.getStringProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/label")</TD></TR>
+                                        <TR><th>file_count</th><TD>$!item.getIntegerProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/file_count")</TD></TR>
+                                        <TR><th>file_size</th><TD>$!item.getProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/file_size")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE><TR><TD>
+                                        #set($xnat_abstractResource_tag_13_NUM_ROWS=$item.getChildItems("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag").size() - 1)
+                                        #if($xnat_abstractResource_tag_13_NUM_ROWS>=0)
+                                            #foreach($xnat_abstractResource_tag_13_COUNTER in [0..$xnat_abstractResource_tag_13_NUM_ROWS])
+                                                <!-- BEGIN tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag[$xnat_abstractResource_tag_13_COUNTER] -->
+                                                <TABLE>
+                                                    <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag[$xnat_abstractResource_tag_13_COUNTER]</font></TH></TR>
+                                                    <TR>
+                                                        <TD align="left" valign="top">
+                                                            <TABLE>
+                                                                <TR><th>tag</th><TD>$!item.getStringProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag[$xnat_abstractResource_tag_13_COUNTER]/tag")</TD></TR>
+                                                                <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag[$xnat_abstractResource_tag_13_COUNTER]/name")</TD></TR>
+                                                            </TABLE>
+                                                        </TD>
+                                                    </TR>
+                                                </TABLE>
+                                                <!-- END tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER]/tags/tag[$xnat_abstractResource_tag_13_COUNTER] -->
+                                            #end
+                                        #end
+                                    </TD></TR></TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/resources/resource[$xnat_abstractResource_12_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($xnat_experimentData_field_14_NUM_ROWS=$item.getChildItems("tip:beniceQc/fields/field").size() - 1)
+                #if($xnat_experimentData_field_14_NUM_ROWS>=0)
+                    #foreach($xnat_experimentData_field_14_COUNTER in [0..$xnat_experimentData_field_14_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/fields/field[$xnat_experimentData_field_14_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/fields/field[$xnat_experimentData_field_14_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>field</th><TD>$!item.getStringProperty("tip:beniceQc/fields/field[$xnat_experimentData_field_14_COUNTER]/field")</TD></TR>
+                                        <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/fields/field[$xnat_experimentData_field_14_COUNTER]/name")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/fields/field[$xnat_experimentData_field_14_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+    <TR>
+        <TD align="left" valign="top">
+            <TABLE><TR><TD>
+                #set($tip_beniceQc_param_15_NUM_ROWS=$item.getChildItems("tip:beniceQc/inputs/params/param").size() - 1)
+                #if($tip_beniceQc_param_15_NUM_ROWS>=0)
+                    #foreach($tip_beniceQc_param_15_COUNTER in [0..$tip_beniceQc_param_15_NUM_ROWS])
+                        <!-- BEGIN tip:beniceQc/inputs/params/param[$tip_beniceQc_param_15_COUNTER] -->
+                        <TABLE>
+                            <TR><TH align="left"><BR><font face="$ui.sansSerifFonts" size="2">tip:beniceQc/inputs/params/param[$tip_beniceQc_param_15_COUNTER]</font></TH></TR>
+                            <TR>
+                                <TD align="left" valign="top">
+                                    <TABLE>
+                                        <TR><th>name</th><TD>$!item.getStringProperty("tip:beniceQc/inputs/params/param[$tip_beniceQc_param_15_COUNTER]/name")</TD></TR>
+                                        <TR><th>value</th><TD>$!item.getStringProperty("tip:beniceQc/inputs/params/param[$tip_beniceQc_param_15_COUNTER]/value")</TD></TR>
+                                    </TABLE>
+                                </TD>
+                            </TR>
+                        </TABLE>
+                        <!-- END tip:beniceQc/inputs/params/param[$tip_beniceQc_param_15_COUNTER] -->
+                    #end
+                #end
+            </TD></TR></TABLE>
+        </TD>
+    </TR>
+</TABLE>

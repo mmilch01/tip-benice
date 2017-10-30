@@ -1,0 +1,65 @@
+<div class="advanced-search-fields autogen">
+	<div class="search-group by-criteria">
+
+		<div class="search-item">
+		<h5>ID:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("EXPT_ID"))
+		</div>
+
+		<div class="search-item">
+		<h5>Date:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("DATE"))
+		</div>
+
+		<div class="search-item">
+		<h5>Project:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("PROJECT"))
+		</div>
+
+		<div class="search-item">
+		<h5>Inserted:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("INSERT_DATE"))
+		</div>
+
+		<div class="search-item">
+		<h5>User:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("INSERT_USER"))
+		</div>
+
+		<div class="search-item">
+		<h5>Pre fcMRI SD:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_PRE_FCMRI_SD"))
+		</div>
+
+		<div class="search-item">
+		<h5>Post fcMRI SD:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_POST_FCMRI_SD"))
+		</div>
+
+		<div class="search-item">
+		<h5>Dropped Frames:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_DROPPED_FRAMES"))
+		</div>
+
+		<div class="search-item">
+		<h5>Pre fcMRI DVARS:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"))
+		</div>
+
+		<div class="search-item">
+		<h5>Post fcMRI DVARS:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_POST_FCMRI_DVARS"))
+		</div>
+
+		<div class="search-item">
+		<h5>fcMRI Protocol Info:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"))
+		</div>
+
+		<div class="search-item">
+		<h5>Registration Atlas:</h5>
+		#xdatSearchField($schemaElement $schemaElement.getDisplayField("REGISTRATION_ATLAS"))
+		</div>
+
+	</div>
+</div>

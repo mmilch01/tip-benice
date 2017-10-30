@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Displays xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xdat/display.xsd" schema-element="tip:beniceQc" full-description="BeniceQc" brief-description="BeniceQc">
+	<DisplayField id="EXPT_ID" header="ID" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.ID"/>
+		<HTML-Link>
+			<Property name="HREF" value="none"/>
+			<Property name="ONCLICK" value="return rpt('@Field1','tip:beniceQc','tip:beniceQc.ID');">
+				<InsertValue id="Field1" field="EXPT_ID"/>
+			</Property>
+		</HTML-Link>
+	</DisplayField>
+	<DisplayField id="RPT" header="ID" visible="true" image="true">
+		<Content type="sql">'/@WEBAPP/images/r.gif'::text</Content>
+		<HTML-Link>
+			<Property name="HREF" value="none"/>
+			<Property name="ONCLICK" value="return rpt('@Field1','tip:beniceQc','tip:beniceQc.ID');">
+				<InsertValue id="Field1" field="EXPT_ID"/>
+			</Property>
+		</HTML-Link>
+	</DisplayField>
+	<DisplayField id="DATE" header="Date" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.date"/>
+	</DisplayField>
+	<DisplayField header="Projects" id="PROJECTS" data-type="string">
+		<DisplayFieldElement name="Field1" viewName="TIP_BENICEQC_PROJECTS" viewColumn="PROJECTS"/>
+	</DisplayField>
+	<DisplayField header="Label" id="LABEL" data-type="string">
+	<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.ID"/>
+	<DisplayFieldElement name="Field2" schema-element="tip:beniceQc.label"/>
+	<Content type="sql">COALESCE(@Field2, @Field1)</Content>
+		<HTML-Link>
+			<SecureLink elementName="tip:beniceQc">
+				<securityMappingValue displayFieldId="PROJECTS" schemaElementMap="tip:beniceQc/sharing/share/project"/>
+				<securityMappingValue displayFieldId="PROJECT" schemaElementMap="tip:beniceQc/project"/>
+			</SecureLink>
+			<Property name="HREF" value="@WEBAPPapp/action/DisplayItemAction/search_value/@Field1/search_element/tip:beniceQc/search_field/tip:beniceQc.ID">
+				<InsertValue id="Field1" field="EXPT_ID"/>
+			</Property>
+			<Property name="ONCLICK" value="return rpt('@Field1','tip:beniceQc','tip:beniceQc.ID');">
+				<InsertValue id="Field1" field="EXPT_ID"/>
+			</Property>
+			<Property name="TITLE" value="Inserted: @Field1 (@Field2)">
+				<InsertValue id="Field1" field="INSERT_DATE"/>
+				<InsertValue id="Field2" field="INSERT_USER"/>
+			</Property>
+		</HTML-Link>
+	</DisplayField>
+	<DisplayField id="PROJECT" header="Project" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.project"/>
+	</DisplayField>
+	<DisplayField id="TIP_BENICEQC_PROJECT_IDENTIFIER" header="TIP_BENICEQC ID" visible="true" searchable="false" data-type="string" xsi:type="SubQueryField">
+		<Content type="sql">tip_beniceqc_project_id</Content>
+		<HTML-Link>
+			<SecureLink elementName="tip:beniceQc">
+				<securityMappingValue displayFieldId="PROJECTS" schemaElementMap="tip:beniceQc/sharing/share/project"/>
+				<securityMappingValue displayFieldId="PROJECT" schemaElementMap="tip:beniceQc/project"/>
+			</SecureLink>
+			<Property name="HREF" value="@WEBAPPapp/action/DisplayItemAction/search_value/@Field1/search_element/tip:beniceQc/search_field/tip:beniceQc.ID/project/@Field2">
+				<InsertValue id="Field1" field="EXPT_ID"/>
+				<InsertValue id="Field2" field="@WHERE"/>
+			</Property>
+		</HTML-Link>
+		<SubQuery>SELECT DISTINCT COALESCE(label,sharing_share_xnat_experimentda_id) AS tip_beniceqc_project_id,sharing_share_xnat_experimentda_id FROM (	SELECT sharing_share_xnat_experimentda_id,label FROM xnat_experimentdata_share WHERE project='@WHERE'	UNION 	SELECT id,label FROM xnat_experimentData WHERE project='@WHERE' )SEARCH</SubQuery>
+		<MappingColumns>
+			<MappingColumn schemaField="tip:beniceQc.ID" queryField="sharing_share_xnat_experimentda_id"/>
+		</MappingColumns>
+	</DisplayField>
+	<DisplayField id="INSERT_DATE" header="Inserted" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.meta.insert_date"/>
+	</DisplayField>
+	<DisplayField id="INSERT_USER" header="Creator" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.meta.insert_user.login"/>
+	</DisplayField>
+	<DisplayField id="TIP_BENICEQC_FIELD_MAP" header="Field" visible="true" searchable="false" data-type="string" xsi:type="SubQueryField">
+		<Content type="sql">field</Content>
+		<SubQuery>SELECT DISTINCT ON ( e.ID) e.ID AS expt_id,field FROM xnat_experimentData_field ef JOIN (SELECT ID,extension,element_name FROM xnat_experimentData e JOIN xdat_meta_element xme ON e.extension=xme.xdat_meta_element_id WHERE xme.element_name='tip:beniceQc') e on ef.fields_field_xnat_experimentdat_id=e.id WHERE name='@WHERE'</SubQuery>
+		<MappingColumns>
+			<MappingColumn schemaField="tip:beniceQc.ID" queryField="expt_id"/>
+		</MappingColumns>
+	</DisplayField>		
+	<DisplayField id="INPUTS_REPO_HOST" header="host" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/inputs/repo/host"/>
+	</DisplayField>
+	<DisplayField id="INPUTS_REPO_OWNER" header="owner" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/inputs/repo/owner"/>
+	</DisplayField>
+	<DisplayField id="INPUTS_REPO_NAME" header="name" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/inputs/repo/name"/>
+	</DisplayField>
+	<DisplayField id="INPUTS_REPO_COMMITHASH" header="commitHash" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/inputs/repo/commitHash"/>
+	</DisplayField>
+	<DisplayField id="BOLD_SCANS_DISPLAY_PROTOCOL_LOOP" header="loop" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/bold_scans/display_protocol/loop"/>
+	</DisplayField>
+	<DisplayField id="BOLD_SCANS_DISPLAY_PROTOCOL_TITLE" header="title" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/bold_scans/display_protocol/title"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_PRE_FCMRI_SD" header="Pre fcMRI SD" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/pre_fcMRI_SD"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_POST_FCMRI_SD" header="Post fcMRI SD" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/post_fcMRI_SD"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DROPPED_FRAMES" header="Dropped Frames" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/dropped_frames"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS" header="Pre fcMRI DVARS" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/pre_fcMRI_DVARS"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS" header="Post fcMRI DVARS" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/post_fcMRI_DVARS"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_LOOP" header="loop" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/loop"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_TABLE_COLUMN_TITLE" header="title" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/table/column/title"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_TABLE_COLUMN" header="column" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/table/column"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_TABLE_LOOPOVER" header="loopover" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/table/loopover"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO" header="info" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/info"/>
+	</DisplayField>
+	<DisplayField id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_TITLE" header="title" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/fcmri_preprocessing/display_protocol/title"/>
+	</DisplayField>
+	<DisplayField id="REGISTRATION_ATLAS" header="atlas" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/registration/atlas"/>
+	</DisplayField>
+	<DisplayField id="REGISTRATION_DISPLAY_PROTOCOL_LOOP" header="loop" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/registration/display_protocol/loop"/>
+	</DisplayField>
+	<DisplayField id="REGISTRATION_DISPLAY_PROTOCOL_TITLE" header="title" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/registration/display_protocol/title"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_DISPLAY_PROTOCOL_LOOP" header="loop" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/RSN_QC/display_protocol/loop"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_DISPLAY_PROTOCOL_TITLE" header="title" visible="true" searchable="true">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc/RSN_QC/display_protocol/title"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_STATUS" header="RSN QC Status" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.validation.status"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_METHOD" header="RSN QC Method" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.validation.method"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_DATE" header="RSN QC Date" visible="true" searchable="true" data-type="date">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.validation.date"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_NOTES" header="RSN QC Notes" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.validation.notes"/>
+	</DisplayField>
+	<DisplayField id="RSN_QC_VALIDATEDBY" header="RSN QC Validated By" visible="true" searchable="true" data-type="string">
+		<DisplayFieldElement name="Field1" schema-element="tip:beniceQc.validation.validated_by"/>
+	</DisplayField>	
+	<DisplayVersion versionName="listing" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
+		<DisplayFieldRef id="RPT"/>
+		<DisplayFieldRef id="LABEL"/>
+		<DisplayFieldRef id="DATE"/>
+		<DisplayFieldRef id="INSERT_USER"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DROPPED_FRAMES"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
+		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
+		<DisplayFieldRef id="RSN_QC_STATUS"/>
+		<DisplayFieldRef id="RSN_QC_VALIDATED_BY"/>
+	</DisplayVersion>
+	<DisplayVersion versionName="listing_csv" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
+		<DisplayFieldRef id="LABEL"/>
+		<DisplayFieldRef id="DATE"/>
+		<DisplayFieldRef id="INSERT_USER"/>		
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DROPPED_FRAMES"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
+		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
+		<DisplayFieldRef id="RSN_QC_STATUS"/>
+	</DisplayVersion>
+	<DisplayVersion versionName="full" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
+		<DisplayFieldRef id="EXPT_ID"/>
+		<DisplayFieldRef id="DATE"/>
+		<DisplayFieldRef id="INSERT_USER"/>		
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DROPPED_FRAMES"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
+		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
+		<DisplayFieldRef id="RSN_QC_STATUS"/>
+	</DisplayVersion>
+	<DisplayVersion versionName="detailed" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
+		<DisplayFieldRef id="EXPT_ID"/>
+		<DisplayFieldRef id="DATE"/>
+		<DisplayFieldRef id="INSERT_USER"/>		
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DROPPED_FRAMES"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
+		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
+		<DisplayFieldRef id="RSN_QC_STATUS"/>
+		<DisplayFieldRef id="RSN_QC_VALIDATEDBY"/>
+	</DisplayVersion>
+	<DisplayVersion versionName="project_bundle" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
+		<DisplayFieldRef id="TIP_BENICEQC_PROJECT_IDENTIFIER"/>
+		<DisplayFieldRef id="DATE"/>
+		<DisplayFieldRef id="INSERT_USER"/>		
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_SD"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DROPPED_FRAMES"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_PRE_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_POST_FCMRI_DVARS"/>
+		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
+		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
+		<DisplayFieldRef id="RSN_QC_STATUS"/>
+		<DisplayFieldRef id="RSN_QC_VALIDATEDBY"/>
+	</DisplayVersion>
+	<ViewLink alias="TIP_BENICEQC_PROJECTS">
+		<Mapping TableName="TIP_BENICEQC_PROJECTS">
+			<MappingColumn rootElement="tip:beniceQc" fieldElement="tip:beniceQc.ID" mapsTo="id"/>
+		</Mapping>
+	</ViewLink>
+	<SQLView name="TIP_BENICEQC_PROJECTS" sql="SELECT id, '&lt;' || expt.project || '&gt;' || xs_a_concat(',&lt;' || shared.project || '&gt;') AS projects FROM xnat_experimentData expt LEFT JOIN xnat_experimentData_share shared ON expt.id=shared.sharing_share_xnat_experimentda_id LEFT JOIN xdat_meta_element xme ON expt.extension = xme.xdat_meta_element_id WHERE element_name='tip:beniceQc' GROUP BY expt.id,expt.project"/>
+</Displays>

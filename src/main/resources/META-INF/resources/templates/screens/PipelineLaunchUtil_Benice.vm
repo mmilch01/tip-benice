@@ -1,0 +1,25 @@
+#set ($template = $data.getTemplateInfo())
+$!template.setLayoutTemplate("/Popup_empty.vm")
+
+<p>Opening Benice Pipeline...</p>
+<form id="form1" name="form1" method="post" action="/app/action/ManagePipeline/popup/true?popup=true">
+
+    <input type="hidden" name="pipeline" value="/data/tip/pipeline/catalog/benice/Benice.xml">
+    <input id="submitMe" type="submit" name="eventSubmit_doRedirect" value="Submit">
+
+    <input type="hidden" name="schema_type" value="xnat:mrSessionData">
+
+    <input type="hidden" name="search_element" value="xnat:mrSessionData">
+    <input type="hidden" name="search_field" value="xnat:mrSessionData.ID">
+    ## assumes $om.getId() will return session ID of the parent page
+    <input type="hidden" name="search_value" value="$om.getId()">
+    <input type="hidden" name="project" value="$project">
+
+</form>
+
+<script>
+    jq('body').addClass('hidden');
+    jq(document).ready(function(){
+        jq('#submitMe').trigger('click');
+    });
+</script>

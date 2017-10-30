@@ -1,0 +1,452 @@
+#set ($sessionId = $!item.getStringProperty("tip:beniceQc/imageSession_ID"))
+$page.setTitle("QC Report: Generated RSN Networks for $sessionId")
+#if ($turbineUtils.GetPassedParameter("popup", $data))
+	#set ($popup = $turbineUtils.GetPassedParameter("popup", data) )
+	#set ($popup = "false")
+#end
+
+<script src="$content.getURI("/scripts/tip/tipStatus.js")"></script>
+<script src="$content.getURI("/scripts/tip/qcImageSlider.js")"></script>
+<script>
+	jq(document).ready(function(){
+		// initialize qc image sliders
+        createQcSlider(jq('.movementograms'));
+        createQcSlider(jq('#fcmri-qc-images'));
+        createQcSlider(jq('#registration-qc-images'));
+        createQcSlider(jq('#rsn-qc-images'));
+
+		// initialize subjectID values
+        jq.getJSON('/REST/experiments/$sessionId?format=json')
+                .done(function(data){
+                    var subjectId = data.items[0].data_fields.subject_ID;
+					jq.data(jq('#acceptQc'),'subjectid',subjectId);
+					jq.data(jq('#rejectQc'),'subjectid',subjectId);
+
+                    jq('#acceptQc').removeClass('hidden');
+                    jq('#rejectQc').removeClass('hidden');
+				});
+
+		// initialize tabs
+        function summaryIndexChanged(){
+            var activeIndex=this.get("activeIndex");
+            YAHOO.util.Cookie.set("${project.getId()}.summary.index",activeIndex);
+        }
+        function toggleLI(_name){
+            var elements = document.getElementsByName("li_"+_name);
+            for(var trI=0;trI<elements.length;trI++){
+                if(elements[trI].style.display=="none"){
+                    elements[trI].style.display="block";
+                }else{
+                    elements[trI].style.display="none";
+                }
+            }
+        }
+        function summaryTabManagerInit(){
+            window.summaryTabView = new YAHOO.widget.TabView('exptSummary');
+
+            window.expt_summary_module = new YAHOO.widget.Module("expt_summary_module",{visible:false,zIndex:5});
+
+			## #addCustomScreenJS($om.getXSIType() "report/tabs_js")
+
+            window.expt_summary_module.show();
+
+            var tabIndex=YAHOO.util.Cookie.get("${om.getId()}.summary.index");
+            window.summaryTabView.set('activeIndex',tabIndex||0);
+
+            window.summaryTabView.subscribe("activeTabChange",summaryIndexChanged);
+        }
+        summaryTabManagerInit();
+
+        // navigate user to appropriate section of report when selecting "Jump To..." selector
+        jq('.reportSectionNavigator').on('change',function(){
+            var selectedId = jq(this).find('option:selected').val();
+            var elementPosition = jq('#'+selectedId).prop('offsetTop');
+            console.log(selectedId, elementPosition);
+            jq(window).scrollTop(elementPosition);
+        });
+    });
+</script>
+<style>
+	#exptSummary table th { text-align: left; }
+</style>
+
+<h2>QC Report: Generated RSN Networks for $om.getImageSessionData().getLabel()</h2>
+
+<table>
+	<tr>
+		<td name="headerTabset" width="75%">
+            <div id="exptSummary" class="yui-navset">
+                <ul class="yui-nav" style="">
+                    <li class="selected"><a href="#tab1"><em>Validation</em></a></li>
+                    <li><a href="#tab2"><em>Details</em></a></li>
+                    <li><a href="#tab3"><em>Parameters</em></a></li>
+
+                </ul>
+                <div class="yui-content">
+                    <div id="tab1">
+						#if($!item.getStringProperty("tip:beniceQc/validation/status"))
+                            <table>
+                                <tr><th>Validation Status: </th><td>$!item.getStringProperty("tip:beniceQc/validation/status")</td></tr>
+                                <tr><th>Validated By: </th><td>$!item.getStringProperty("tip:beniceQc/validation/validated_by")</td></tr>
+                                <tr><th>Date Validated: </th><td>$!item.getProperty("tip:beniceQc/validation/date")</td></tr>
+                                <tr><th>Method: </th><td>$!item.getStringProperty("tip:beniceQc/validation/method")</td></tr>
+                                <tr><th>Notes: </th><td>$!item.getStringProperty("tip:beniceQc/validation/notes")</td></tr>
+                            </table>
+						#else
+                            <p>QC Assessor requires validation. </p>
+						#end
+                            <p style="margin-top: 1em;">
+                            ##    <button id="acceptQc" class="btn hidden" onclick="TIP.setValidationStatus(this,'setValidationStatusForm')" data-status="Passed" data-projectId="$project" data-subjectId="$!subject.getId()" data-sessionId="$sessionId" data-assessorId="$om.getId()"><span class="icon icon-sm icon-check-blue"></span> Accept QC</button>
+                            ##    <button id="rejectQc" class="btn hidden" onclick="TIP.setValidationStatus(this,'setValidationStatusForm')" data-status="Failed" data-projectId="$project" data-subjectId="$!subject.getId()" data-sessionId="$sessionId" data-assessorId="$om.getId()"><span class="icon icon-sm icon-cancel"></span> Reject QC</button>
+                            	<button class="btn btn2" onclick="window.location.assign('/app/action/XDATActionRouter/xdataction/edit/search_element/tip%3AbeniceQc/search_field/tip%3AbeniceQc.id/search_value/$!item.getStringProperty("tip:beniceQc/ID")/popup/false/project/$om.getProject()')">Set QC Status</button>
+							</p>
+
+							<form id="setValidationStatusForm">
+								<input type="hidden" name="tip:beniceQc/validation/method" value="Assessor QC Report Review" />
+								<input type="hidden" name="tip:beniceQc/validation/date.month" id="" value="" />
+								<input type="hidden" name="tip:beniceQc/validation/date.date" value="" />
+								<input type="hidden" name="tip:beniceQc/validation/date.year" value="" />
+								## exclude this field here, collect this in the modal.
+								## <input type="hidden" name="tip:beniceQc/validation/notes" value="" />
+								<input type="hidden" name="tip:beniceQc/validation/validated_by" value="$!data.getSession().getAttribute("user").getUsername()" />
+								<input type="hidden" name="tip:beniceQc/validation/xnat_validationData_id" />
+                                <input type="hidden" name="tip:beniceQc/validation/status" id="tipStatusField" value="">
+							</form>
+                    </div>
+
+                    <div id="tab2">
+                        <table>
+                            <tr><th>Accession #:</th><td>$!item.getStringProperty("tip:beniceQc/ID")</td></tr>
+                            <tr><th>Date Added:</th><td>$!item.getProperty("tip:beniceQc/date") $!item.getProperty("tip:beniceQc/time")</td></tr>
+                            <tr><th>Duration:</th><td>$!item.getProperty("tip:beniceQc/duration")</td></tr>
+                            <tr><th>Delay:</th><td>$!item.getIntegerProperty("tip:beniceQc/delay")</td></tr>
+                            <tr><th>Delay/ref_expt_id:</th><td>$!item.getStringProperty("tip:beniceQc/delay/ref_expt_id")</td></tr>
+                            <tr><th>Acquisition Site:</th><td>$!item.getStringProperty("tip:beniceQc/acquisition_site")</td></tr>
+							#if($!item.getStringProperty("tip:beniceQc/visit_id"))
+                                <TR><TD>visit_id</TD><TD>$!item.getStringProperty("tip:beniceQc/visit_id")</TD></TR>
+                                <TR><TD>visit</TD><TD>$!item.getStringProperty("tip:beniceQc/visit")</TD></TR>
+							#end
+                        </table>
+                    </div>
+
+                    <div id="tab3">
+                        <p><strong>Pipeline Run Info</strong></p>
+                        <table>
+                            <tr><th>label</th><td>$!item.getStringProperty("tip:beniceQc/label")</td></tr>
+                            <tr><th>version</th><td>$!item.getIntegerProperty("tip:beniceQc/version")</td></tr>
+                            <tr><th>original</th><td>$!item.getStringProperty("tip:beniceQc/original")</td></tr>
+                            <tr><th>protocol</th><td>$!item.getStringProperty("tip:beniceQc/protocol")</td></tr>
+                            <tr><th>inputs/repo/host</th><td>$!item.getStringProperty("tip:beniceQc/inputs/repo/host")</td></tr>
+                            <tr><th>inputs/repo/owner</th><td>$!item.getStringProperty("tip:beniceQc/inputs/repo/owner")</td></tr>
+                            <tr><th>inputs/repo/name</th><td>$!item.getStringProperty("tip:beniceQc/inputs/repo/name")</td></tr>
+                            <tr><th>inputs/repo/commitHash</th><td>$!item.getStringProperty("tip:beniceQc/inputs/repo/commitHash")</td></tr>
+                        </table>
+                        <p><strong>Additional QC Info</strong></p>
+						#parse("/screens/XDATScreen_report_tip_beniceQc_details.vm")
+                    </div>
+
+                </div>
+            </div>
+
+		</td>
+		<td name="headerActions" width="25%" valign="top">
+			#parse($turbineUtils.getTemplateName("actions",$om.getXSIType(),$project))
+		</td>
+	</tr>
+</table>
+
+<div id="notes">
+	<h3>Notes</h3>
+	#if($!item.getStringProperty("tip:beniceQc/note"))
+		<textarea style="width: 600px; height: 3em" readonly>$!item.getStringProperty("tip:beniceQc/note")</textarea>
+	#else
+		<p>No notes.</p>
+	#end
+</div>
+
+<div name="reportSections" style="width: 800px; position:relative;">
+	<a name="section1_bold"></a>
+	<div class="report-info-block" id="section1_bold">
+		<h2>BOLD Scans
+			<span class="btn-inline right">
+				<select class="reportSectionNavigator">
+					<option selected disabled>Jump To...</option>
+					<option value="section1_bold">BOLD Scans</option>
+					<option value="section2_fcmri">fcMRI Preprocessing</option>
+					<option value="section3_registration">Registration</option>
+					<option value="section4_rsn_qc">RSN QC</option>
+				</select>
+			</span>
+		</h2>
+
+		#set($qcBoldScans=$item.getChildItems("tip:beniceQc/bold_scans/bold_scan"))
+		#if($qcBoldScans.size() > 0)
+			#foreach($qcBoldScan in $qcBoldScans)
+
+				<p><strong>
+					BOLD Run $!qcBoldScan.getStringProperty("run"),
+					Scan $!qcBoldScan.getStringProperty("number") -
+					$!qcBoldScan.getStringProperty("description")
+				</strong></p>
+				<table>
+					<tr>
+						<th>Scan</th><th>Movement (rms mm)</th><th>Movement (rms mm/frame)</th><th>Pre-fcMRI preproc SD (mode 1000 nrm)</th>
+					</tr>
+					<tr>
+						<td>$!qcBoldScan.getStringProperty("number")</td>
+						<td>$!qcBoldScan.getStringProperty("rms_mm")</td>
+						<td>$!qcBoldScan.getStringProperty("rms_mm_frame")</td>
+						<td>$!qcBoldScan.getStringProperty("pre_fcmri_sd")</td>
+					</tr>
+				</table>
+
+				<div class="movementograms">
+					#set($qcBoldImages=$qcBoldScan.getChildItems("bold_image"))
+					#if($qcBoldImages.size()>0)
+						#foreach($qcBoldImage in $qcBoldImages)
+							<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!qcBoldImage.getStringProperty("url")" title="$!qcBoldImage.getStringProperty("display_protocol/title")" />
+						#end
+					#end
+				</div>
+
+				<p>&nbsp;</p>
+			#end
+		#end
+	</div>
+
+	##set($fcmriPreprocessing = $item.getChildItems("tip:beniceQc/fcmri_preprocessing"))
+
+	<a name="section2_fcmri"></a>
+	<div class="report-info-block" id="section2_fcmri">
+		<h2>fcMRI Preprocessing
+			<span class="btn-inline right">
+				<select class="reportSectionNavigator">
+					<option selected disabled>Jump To...</option>
+					<option value="section1_bold">BOLD Scans</option>
+					<option value="section2_fcmri">fcMRI Preprocessing</option>
+					<option value="section3_registration">Registration</option>
+					<option value="section4_rsn_qc">RSN QC</option>
+				</select>
+			</span>
+		</h2>
+
+		<table>
+			<tr>
+				<th>Scan</th><th>Movement (rms mm)</th><th>Movement (rms mm/frame)</th><th>Pre-fcMRI preproc SD (mode 1000 nrm)</th>
+			</tr>
+			#if($qcBoldScans.size() > 0)
+				#foreach($qcBoldScan in $qcBoldScans)
+					<tr>
+						<td>$!qcBoldScan.getStringProperty("number")</td>
+						<td>$!qcBoldScan.getStringProperty("rms_mm")</td>
+						<td>$!qcBoldScan.getStringProperty("rms_mm_frame")</td>
+						<td>$!qcBoldScan.getStringProperty("pre_fcmri_sd")</td>
+					</tr>
+				#end
+			#end
+			<tr>
+				<th colspan="4">All Scans</th>
+			</tr>
+			<tr>
+				<td colspan="4">
+
+					<p>Pre-fcMRI preprocessing SD: $!item.getStringProperty("tip:beniceQc/fcmri_preprocessing/pre_fcMRI_SD")</p>
+					<p>Post-fcMRI preprocessing SD: $!item.getStringProperty("tip:beniceQc/fcmri_preprocessing/post_fcMRI_SD")</p>
+					<p>Total Dropped Frames: $!item.getStringProperty("tip:beniceQc/fcmri_preprocessing/dropped_frames")</p>
+				</td>
+			</tr>
+
+		</table>
+
+		<div id="fcmri-qc-images">
+			#set($fcmriImages=$item.getChildItems("tip:beniceQc/fcmri_preprocessing/fcmri_image"))
+			#if($!fcmriImages.size() > 0)
+				#foreach($fcmriImage in $fcmriImages)
+					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!fcmriImage.getStringProperty("url")" title="$!fcmriImage.getStringProperty("display_protocol/title")" />
+				#end
+			#end
+		</div>
+
+	</div>
+
+	<a name="section3_registration"></a>
+	<div class="report-info-block" id="section3_registration">
+		<h2>Registration
+			<span class="btn-inline right">
+				<select class="reportSectionNavigator">
+					<option selected disabled>Jump To...</option>
+					<option value="section1_bold">BOLD Scans</option>
+					<option value="section2_fcmri">fcMRI Preprocessing</option>
+					<option value="section3_registration">Registration</option>
+					<option value="section4_rsn_qc">RSN QC</option>
+				</select>
+			</span>
+		</h2>
+
+        <p><strong>Registration Atlas:</strong> $!item.getStringProperty("tip:beniceQc/registration/atlas")</p>
+
+		<div id="registration-qc-images">
+			#set($regQcImages=$item.getChildItems("tip:beniceQc/registration/reg_image"))
+			#if($!regQcImages.size() > 0)
+				#foreach($regQcImage in $regQcImages)
+					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!regQcImage.getStringProperty("url")" title="$!regQcImage.getStringProperty("display_protocol/title")" />
+				#end
+			#end
+		</div>
+	</div>
+
+	<a name="section4_rsn_qc"></a>
+	<div class="report-info-block" id="section4_rsn_qc">
+		<h2>RSN QC
+			<span class="btn-inline right">
+				<select class="reportSectionNavigator">
+					<option selected disabled>Jump To...</option>
+					<option value="section1_bold">BOLD Scans</option>
+					<option value="section2_fcmri">fcMRI Preprocessing</option>
+					<option value="section3_registration">Registration</option>
+					<option value="section4_rsn_qc">RSN QC</option>
+				</select>
+			</span>
+		</h2>
+
+		<div id="rsn-qc-images">
+			#set($rsnQcImages=$item.getChildItems("tip:beniceQc/RSN_QC/rsn_image"))
+			#if($!rsnQcImages.size() > 0)
+				#foreach($rsnQcImage in $rsnQcImages)
+					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!rsnQcImage.getStringProperty("url")" title="$!rsnQcImage.getStringProperty("display_protocol/title")" />
+				#end
+			#end
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript" src="$content.getURI("scripts/FileViewer.js")"></script>
+<script type="text/javascript">
+
+    function  toggleQuarantine(){
+		#if($item.needsActivation())
+            window.qStatus="true"
+		#else
+            window.qStatus="false"
+		#end
+        if(window.qStatus=="true"){
+            var initCallback={
+                success:function(o){
+                    closeModalPanel("quarantine_");
+                    if(document.getElementById("quarantine_div")!=undefined){
+                        document.getElementById("quarantine_div").style.display='none';
+                    }
+                    if(document.getElementById("quarantine_a")!=undefined){
+                        document.getElementById("quarantine_a").innerHTML="Places this data in quarantine.";
+                        document.getElementById("quarantine_a").innerHTML="<img id='quarantine_img' border='0' src='$content.getURI("images/checkmarkOrange.gif")'/> Quarantine";
+                    }
+                    window.qStatus="false";
+                },
+                failure:function(o){
+                    closeModalPanel("quarantine_");
+                },
+                cache:false, // Turn off caching for IE
+                scope:this
+            }
+            openModalPanel("quarantine_","Removing item from quarantine.");
+			#if($item.instanceOf("xnat:subjectData"))
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getId()?activate=true&XNAT_CSRF="+csrfToken,initCallback);
+			#elseif($item.instanceOf("xnat:derivedData"))
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getImageSessionData().getSubjectId()/experiments/$om.getImageSessionData().getId()/assessors/$om.getId()?activate=true&XNAT_CSRF="+csrfToken,initCallback);
+			#else
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getSubjectId()/experiments/$om.getId()?activate=true&XNAT_CSRF="+csrfToken,initCallback);
+			#end
+        }else{
+            var initCallback={
+                success:function(o){
+                    closeModalPanel("activate_");
+                    if(document.getElementById("quarantine_div")!=undefined){
+                        document.getElementById("quarantine_div").style.display='none';
+                    }
+                    if(document.getElementById("quarantine_a")!=undefined){
+                        document.getElementById("quarantine_a").innerHTML="Removes this data and its descendents from quarantine.";
+                        document.getElementById("quarantine_a").innerHTML="<img id='quarantine_img' border='0' src='$content.getURI("images/checkmarkGreen.gif")'/> Activate";
+                    }
+                    window.qStatus="true";
+                },
+                failure:function(o){
+                    closeModalPanel("activate_");
+                },
+                cache:false, // Turn off caching for IE
+                scope:this
+            }
+            openModalPanel("activate_","Placing item in quarantine.");
+			#if($item.instanceOf("xnat:subjectData"))
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getId()?quarantine=true&XNAT_CSRF="+csrfToken,initCallback);
+			#elseif($item.instanceOf("xnat:derivedData"))
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getImageSessionData().getSubjectId()/experiments/$om.getImageSessionData().getId()/assessors/$om.getId()?quarantine=true&XNAT_CSRF="+csrfToken,initCallback);
+			#else
+                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+"/REST/projects/$om.getProject()/subjects/$om.getSubjectId()/experiments/$om.getId()?quarantine=true&XNAT_CSRF="+csrfToken,initCallback);
+			#end
+        }
+    }
+
+
+
+    var obj={};
+    obj.uri=serverRoot + "/REST/experiments/$!om.getImagesessionId()/assessors/$!om.getId()";
+    obj.refresh = serverRoot + "/data/services/refresh/catalog?options=" + encodeURIComponent("populateStats,append,delete,checksum") + "&XNAT_CSRF=" + csrfToken + "&resource=/archive/experiments/$!om.getId()";
+    obj.objectId = "$!om.getId()";
+    obj.objectType = "assessor";
+    obj.categories={};
+    obj.categories.ids=[];
+
+		#if($item.isActive() || $item.isQuarantine())
+			#if ($item.canEdit($data.getSession().getAttribute("user")))
+            obj.canEdit=true;
+			#else
+            obj.canEdit=false;
+			#end
+			#if ($item.canDelete($data.getSession().getAttribute("user")))
+            obj.canDelete=true;
+			#else
+            obj.canDelete=false;
+			#end
+		#else
+        obj.canEdit=false;
+        obj.canDelete=false;
+		#end
+
+		#if($om.getSortedScans().size()>0)
+        obj.categories.ids.push("scans");
+        obj.categories["scans"]=new Array();
+			#foreach($scan in $om.getSortedScans())
+            obj.categories["scans"].push({id:"$scan.getId()",label:"$!scan.getId() $!scan.getType()"});
+			#end
+		#end
+
+		#if($om.getReconstructions_reconstructedimage().size()>0)
+        obj.categories.ids.push("reconstructions");
+        obj.categories["reconstructions"]=new Array();
+			#foreach($recon in $om.getReconstructions_reconstructedimage())
+            obj.categories["reconstructions"].push({id:"$recon.getId()",label:"$!recon.getId() $!recon.getType()"});
+			#end
+		#end
+
+		#if($om.getMinimalLoadAssessors().size()>0)
+        obj.categories.ids.push("assessors");
+        obj.categories["assessors"]=new Array();
+			#foreach($assessor in $om.getMinimalLoadAssessors())
+            var element_name = window.available_elements.getByName("$!assessor.getXSIType()");
+            if(undefined != element_name && null != element_name){
+                obj.categories["assessors"].push({id:"$assessor.getId()",label:"$!assessor.getLabel() " + element_name.singular});
+            }else{
+                obj.categories["assessors"].push({id:"$assessor.getId()",label:"$!assessor.getLabel() $!assessor.getXSIType()"});
+            }
+			#end
+		#end
+
+    obj.isImageSession=false;
+    window.viewer=new FileViewer(obj);
+
+    function showFiles(){
+        window.viewer.render();
+    }
+
+</script>

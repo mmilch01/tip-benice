@@ -1,0 +1,213 @@
+##Copyright 2009 Washington University in St. Louis All Rights Reserved
+
+##<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+#set ($template = $data.getTemplateInfo())
+$!template.setLayoutTemplate("/Popup_empty.vm")
+
+#set ($project = $om.getProject())
+#set ($schemaType = $newpipeline.getSchemaElementName())
+#set ($parameters =$newpipeline.getParameters_parameter())
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+<script language="Javascript">
+
+    window.resizeTo(650,450)
+
+    jq(document).prop("title","Configure BENICE (RSN_Gen) Pipeline for $project");
+
+    jq(document).ready(function(){
+        // hijack the form submit button and use the xmodal footer submit button instead.
+        jq("#button-submit").on("click",function(){
+            // Validate that T1 scan types param is not blank
+            if (! jq("#params-mr_scan_types").val().trim() ) {
+                alert("You must enter the T1 scan type(s) for your project.");
+                $("#params-mr_scan_types").css("border","1px solid red")
+                        .animate({
+                            borderWidth: "1"
+                        },200,function(){
+                            $(this).css("border","1px solid #999");
+                        });
+                return false;
+            }
+
+            for (var config in configData) {
+                configData[config].saveConfig();
+            }
+            jq("#submitForm").click();
+        });
+    });
+
+
+
+</script>
+<style>
+    html body.popup {
+        background: rgb(240, 240, 240) !important;
+    }
+</style>
+
+<!-- create an xmodal container inside the popup window -->
+<div id="pipeline_modal" class="pipemodal xmodal fixed embedded">
+    <div class="body content scroll">
+
+
+        <!-- handle error messages -->
+        #if ($data.message)
+            <div class="error">$data.message</div>
+        #end
+
+        <div class="inner">
+            <!-- modal body start -->
+
+            <form id="beniceOptions" name="beniceOptions" class="friendlyForm" method="post" action="$link.setAction("ManagePipeline")">
+
+                <h2>Set up BENICE (RSN_Gen) for project: $project </h2>
+
+                <p><strong> Please define the following default parameters for your project. </strong></p>
+
+                <fieldset>
+
+                    #set($i=0)
+                    #foreach ($parameter in $parameters)
+                        <input type="hidden" id="${schemaType}.parameters.parameter[$i].name" name="${schemaType}.parameters.parameter[$i].name" value="$!parameter.getName()"/>
+                        <input type="hidden" id="${schemaType}.parameters.parameter[$i].description" name="${schemaType}.parameters.parameter[$i].description" value="$!parameter.getDescription()"/>
+
+                            #if ($!parameter.getSchemalink())
+                                <input type="hidden" id="${schemaType}.parameters.parameter[$i].schemaLink" name="${schemaType}.parameters.parameter[$i].schemaLink" value="$!parameter.getSchemalink()"/>
+                            #elseif ($!parameter.getCsvvalues())
+                                <input type="hidden" id="${schemaType}.parameters.parameter[$i].csvValues" name="${schemaType}.parameters.parameter[$i].csvValues" value="$!parameter.getCsvvalues()"/>
+                            #end
+
+                        #set ($i = $i+1)
+                    #end
+                ## ####
+                    #set($scanTypeToolName="params")
+                    #set($scanTypeFileName="mr_scan_types")
+                    #config($scanTypeToolName $scanTypeFileName $project)
+                    <script>
+                        var labelNode = $("#${scanTypeToolName}-${scanTypeFileName}-label");
+                        labelNode.attr("title","Scan types");
+                        labelNode.text("What are the scan types for MPRAGE scans in your project?");
+                    </script>
+                ## ####
+                    #set($scanTypeToolName="params")
+                    #set($scanTypeFileName="bold_scan_types")
+                    #set($nullable="true")
+                    #config($scanTypeToolName $scanTypeFileName $project)
+                    <script>
+                        var labelNode = $("#${scanTypeToolName}-${scanTypeFileName}-label");
+                        labelNode.attr("title","Scan types");
+                        labelNode.text("What are the scan types for BOLD scans in your project?");
+                    </script>
+
+                    <!-- set up checkbox setting for custom launcher -->
+                    <p>
+                        <label>Use a Custom Launcher?</label>
+                        <select id="param-customLauncher" name="param-customLauncher">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </p>
+
+                    <script>
+                        if (!configData) {
+                            var configData = {};
+                        }
+                        configData["param-customLauncher"] = {};
+                        configData["param-customLauncher"]["currentlyStored"] = "";
+
+                        configData["param-customLauncher"]["project"] = "$!project";
+                        if (configData["param-customLauncher"]["project"]) {
+                            configData["param-customLauncher"]["configPath"] = '/data/projects/'+configData["param-customLauncher"]["project"]+'/config/params/customLauncher?format=json';
+                        } else {
+                            configData["param-customLauncher"]["configPath"] = '/data/config/params/customLauncher?format=json';
+                        }
+
+                        configData["param-customLauncher"].saveConfig=function(){
+                            this.inputValue = $("#param-customLauncher").find('option:selected').val();
+
+                            if (this.inputValue != configData["param-customLauncher"]["currentlyStored"] ) {
+                                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+configData["param-customLauncher"].configPath+'?inbody=true&overwrite=true&XNAT_CSRF=' + window.csrfToken,
+                                        {
+                                            success : function() {
+                                                configData["param-customLauncher"]["currentlyStored"] = YUIDOM.get("param-customLauncher").value;
+                                            },
+                                            failure: function(o){
+                                                var options = {};
+                                                var message = "<p>Failed to store config params/customLauncher.</p>";
+                                                var reasons = "";
+                                                if(o.responseText){
+                                                    reasons = o.responseText.match(/\<h3\>(.*[\n\r])+\<\/h3\>/g);
+                                                    if(reasons && reasons[0]){
+                                                        reasons = reasons[0].replace(/\<\/?h3\>/g,"").replace(/[\n\r]/g,"<br>");
+                                                        options = {width: 500, height: 400};
+                                                    }else{
+                                                        reasons = "";
+                                                    }
+                                                }
+                                                xModalMessage('Config error', message + reasons, "OK", options);
+                                            },
+                                            cache:false, // Turn off caching for IE
+                                            scope: this
+                                        },
+                                        this.inputValue);
+                            }
+                        }
+
+                        configData["param-customLauncher"].loadConfig=function(obj){
+                            this.configResults = JSON.parse(obj.responseText);
+                            var paramContents = this.configResults["ResultSet"]["Result"][0]["contents"];
+
+                            $("#param-customLauncher").find('option').each(function() {
+                                if ($(this).val() === paramContents ) $(this).prop('selected', 'selected');
+                            });
+                            configData["param-customLauncher"]["currentlyStored"] = paramContents;
+                        }
+
+                        YAHOO.util.Connect.asyncRequest('GET', serverRoot+configData["param-customLauncher"]["configPath"], {success : configData["param-customLauncher"].loadConfig, failure : function(){}, cache : false, scope : this});
+                    </script>
+
+                    <div class="hidden">
+                        <input type="submit" class="btn btn1" id="submitForm" name="eventSubmit_doAddprojectpipeline" value="Submit"/>
+                    </div>
+
+                    <input type="hidden" id="${schemaType}.stepId" name="${schemaType}.stepId" value="Benice"/>
+                    <input type="hidden" id="${schemaType}.displayText" name="${schemaType}.displayText" value="Benice"/>
+                    <input type="hidden" id="${schemaType}.name" name="${schemaType}.name" value="Benice"/>
+                    <input type="hidden" id="${schemaType}.location" name="${schemaType}.location" value="$newpipeline.getLocation()"/>
+                    <input type="hidden" id="${schemaType}.customwebpage" name="${schemaType}.customwebpage" value="$newpipeline.getCustomwebpage()"/>
+                    <input type="hidden" id="${schemaType}.description" name="${schemaType}.description" value='$newpipeline.getDescription()'/>
+
+
+
+                    <input type="hidden" name="search_element" value="xnat:projectData"/>
+                    <input type="hidden" name="search_field" value="xnat:projectData.ID"/>
+                    <input type="hidden" name="search_value" value="$project"/>
+                    <input type="hidden" name="project" value="$project"/>
+                    <input type="hidden" name="pipeline_path" value="$pipeline_path"/>
+                    <input type="hidden" name="dataType" value="$dataType"/>
+                    <input type="hidden" name="schemaType" value="$schemaType"/>
+                    <input type="hidden" name="edit" value="$edit"/>
+                    <input type="hidden" name="destination" value="JS_Parent_Return.vm"/>
+
+                </fieldset>
+
+
+            </form>
+
+            <!-- modal body end -->
+        </div>
+    </div>
+    <div class="footer">
+        <!-- multi-panel controls are placed in footer -->
+        <div class="inner">
+            <span class="buttons">
+                <a class="cancel close button" href="javascript:self.close()">Cancel</a>
+                <a id="button-submit" class="default button" href="javascript:">Configure Pipeline</a>
+            </span>
+        </div>
+    </div>
+</div>
+<!-- end of xmodal container -->

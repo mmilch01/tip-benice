@@ -1,0 +1,20 @@
+#if ($assessorId)
+    #set ($link="$server/data/experiments/$expt.getId()/assessors/${assessorId}")
+    #set ($linkText="View assessor report")
+    #set ($canfindqc=true)
+    #set ($qclink="${link}/resources/DATA/files/QC/0_$expt.getId()_qc")
+#else
+    #set ($link="$server/data/experiments/$expt.getId()")
+    #set ($linkText="View session page")
+    #set ($canfindqc=false)
+#end
+
+<p>Dear $user.getFirstname() $user.getLastname(),<br/>
+    Synthetic RSN DICOM images were generated for $expt.getLabel().<br/>
+#if($canfindqc)
+    <br/>
+    <a href="${qclink}.pdf">View QC PDF</a>
+#end
+    <br/>
+    <a href="${link}?format=html">$linkText</a> </p>
+<p>$system Team</p>

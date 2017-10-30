@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://nrg.wustl.edu/tip" xmlns:xdat="http://nrg.wustl.edu/xdat" xmlns:tip="http://nrg.wustl.edu/tip" xmlns:xnat="http://nrg.wustl.edu/xnat" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://nrg.wustl.edu/xnat" schemaLocation="../xnat/xnat.xsd"/>
+	<!-- TIP QC Assessor (Benice) -->
+	<xs:element name="BeniceQc" type="tip:beniceQc"/>
+	<xs:complexType name="beniceQc">
+		<xs:complexContent>
+			<xs:extension base="xnat:imageAssessorData">
+				<xs:sequence>
+					<xs:element name="inputs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="params" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:appinfo>
+														<xdat:field>
+															<xdat:relation uniqueComposite="NAME"/>
+														</xdat:field>
+													</xs:appinfo>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="name" type="xs:string" minOccurs="0">
+															<xs:annotation>
+																<xs:appinfo>
+																	<xdat:field uniqueComposite="NAME"/>
+																</xs:appinfo>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="value" type="xs:string" minOccurs="0"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="repo" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="host" type="xs:string" minOccurs="0"/>
+											<xs:element name="owner" type="xs:string" minOccurs="0"/>
+											<xs:element name="name" type="xs:string" minOccurs="0"/>
+											<xs:element name="commitHash" type="xs:string" minOccurs="0"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>								
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="bold_scans">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="bold_scan" minOccurs="1" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:appinfo>
+											<xdat:field>
+												<xdat:relation uniqueComposite="scan_nbr"/>
+											</xdat:field>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="run" type="xs:string" minOccurs="0"/>
+											<xs:element name="number" type="xs:string" minOccurs="0">
+												<xs:annotation>
+													<xs:appinfo>
+														<xdat:field uniqueComposite="scan_nbr"/>
+													</xs:appinfo>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="description" type="xs:string" minOccurs="0"/>
+											<xs:element name="bold_image" minOccurs="1" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:appinfo>
+														<xdat:field>
+															<xdat:relation uniqueComposite="bold_img"/>
+														</xdat:field>
+													</xs:appinfo>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence minOccurs="0">
+														<xs:element name="display_protocol" minOccurs="0">
+															<xs:complexType>
+																<xs:attribute name="title" type="xs:string"/>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+													<xs:attribute name="id" type="xs:string">
+														<xs:annotation>
+															<xs:appinfo>
+																<xdat:field uniqueComposite="bold_img"/>
+															</xs:appinfo>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="url" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="rms_mm" type="xs:string" minOccurs="0"/>
+											<xs:element name="rms_mm_frame" type="xs:string" minOccurs="0"/>
+											<xs:element name="pre_fcmri_sd" type="xs:string" minOccurs="0"/>
+											<xs:element name="display_protocol" minOccurs="0">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="loop" type="xs:string" minOccurs="0"/>	
+													</xs:sequence>
+													<xs:attribute name="title" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="display_protocol" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="loop" type="xs:string" minOccurs="0"/>	
+										</xs:sequence>
+										<xs:attribute name="title" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>	
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="fcmri_preprocessing">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="fcmri_image" minOccurs="1" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:appinfo>
+											<xdat:field>
+												<xdat:relation uniqueComposite="fcmri_img"/>
+											</xdat:field>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="display_protocol" minOccurs="0">
+												<xs:complexType>
+													<xs:attribute name="title" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="id" type="xs:string">
+											<xs:annotation>
+												<xs:appinfo>
+													<xdat:field uniqueComposite="fcmri_img"/>
+												</xs:appinfo>
+											</xs:annotation>
+										</xs:attribute>
+										<xs:attribute name="url" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="pre_fcMRI_SD" type="xs:string" minOccurs="0"/>
+								<xs:element name="post_fcMRI_SD" type="xs:string" minOccurs="0"/>
+								<xs:element name="dropped_frames" type="xs:string" minOccurs="0"/>
+								<xs:element name="pre_fcMRI_DVARS" type="xs:string" minOccurs="0"/>
+								<xs:element name="post_fcMRI_DVARS" type="xs:string" minOccurs="0"/>
+								<xs:element name="display_protocol" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="loop" type="xs:string" minOccurs="0"/>
+											<xs:element name="table" minOccurs="0">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="column" minOccurs="1">
+															<xs:complexType>
+																<xs:simpleContent>
+																	<xs:extension base="xs:string">
+																		<xs:attribute name="title" type="xs:string" use="optional"/>
+																	</xs:extension>
+																</xs:simpleContent>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+													<xs:attribute name="loopover" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="info" type="xs:string" minOccurs="1"/>
+										</xs:sequence>
+										<xs:attribute name="title" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>		
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="registration">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="atlas" type="xs:string" minOccurs="0"/>
+								<xs:element name="reg_image" minOccurs="1" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:appinfo>
+											<xdat:field>
+												<xdat:relation uniqueComposite="reg_img"/>
+											</xdat:field>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="display_protocol" minOccurs="0">
+												<xs:complexType>
+													<xs:attribute name="title" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="id" type="xs:string">
+											<xs:annotation>
+												<xs:appinfo>
+													<xdat:field uniqueComposite="reg_img"/>
+												</xs:appinfo>
+											</xs:annotation>
+										</xs:attribute>
+										<xs:attribute name="url" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="display_protocol" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="loop" type="xs:string" minOccurs="0"/>
+										</xs:sequence>
+										<xs:attribute name="title" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>						
+					<xs:element name="RSN_QC">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="rsn_image" minOccurs="1" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:appinfo>
+											<xdat:field>
+												<xdat:relation uniqueComposite="rsn_img"/>
+											</xdat:field>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="display_protocol" minOccurs="0">
+												<xs:complexType>
+													<xs:attribute name="title" type="xs:string" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="id" type="xs:string">
+											<xs:annotation>
+												<xs:appinfo>
+													<xdat:field uniqueComposite="rsn_img"/>
+												</xs:appinfo>
+											</xs:annotation>
+										</xs:attribute>
+										<xs:attribute name="url" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="display_protocol" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="loop" type="xs:string" minOccurs="0"/>
+										</xs:sequence>
+										<xs:attribute name="title" type="xs:string" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

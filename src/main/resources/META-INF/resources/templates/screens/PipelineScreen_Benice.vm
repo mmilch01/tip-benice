@@ -1,0 +1,212 @@
+##Copyright 2005 Harvard University / Howard Hughes Medical Institute (HHMI) All Rights Reserved
+    #set ($template = $data.getTemplateInfo())
+    $!template.setLayoutTemplate("/Popup_empty.vm")
+
+    #set ($sessionId = $om.getLabel())
+
+<!-- get Javascript Dependencies -->
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+<script language="Javascript">
+
+(function(){
+
+
+    function validate() {
+        var scansSelected = true;
+        var requiredFields = {
+            mprs: 'select',
+            fstd: 'input'
+        };
+        for (var fieldName in requiredFields) {
+            var eleVal = [];
+            if (requiredFields[fieldName] === 'checkbox') {
+                eleVal = [];
+                $('input[name=' + fieldName + ']:checked').each(function () {
+                    eleVal.push($(this).val());
+                });
+                if (eleVal.length === 0) {
+                    scansSelected = false;
+                    break;
+                }
+            } else {
+                eleVal = $(requiredFields[fieldName] + "[name=" + fieldName + "]").val()
+                if (eleVal.length === 0) {
+                    scansSelected = false;
+                    break;
+                }
+            }
+
+        }
+        return scansSelected;
+    }
+
+    function popupCloser(){
+        // reload the session window that opened this popup, then close the popup
+        window.opener.location.reload();
+        self.close();
+    }
+
+    function buildBenice(){
+        if (validate()) {
+            // add brackets around fstd scan list
+            var fstdList = $('input[name=fstd]').val();
+            $('input[name=fstd]').val("["+fstdList+"]");
+
+            // collect all form parameters and submit to pipeline handler
+            var params = $('form[name=RSNGenOptions]').serialize();
+            $.ajax({ url: '/REST/projects/$project/pipelines/Benice/experiments/$om.getId()?'+params, method: 'POST' })
+                .error( function(){ alert("Something went wrong,") })
+                .success( function(){
+                    xmodal.confirm({
+                        content: "RSN Gen pipeline successfully queued. You will need to refresh the session page.",
+                        cancelLabel: "Cancel",
+                        cancelAction: "Return",
+                        okAction: popupCloser
+                    });
+                });
+        } else {
+            xmodal.message("Required fields are empty. Please check your inputs.");
+        }
+    }
+
+    function confirmBuild(){
+        xmodal.confirm({
+            content: "Run RSN generation pipeline with these parameters?",
+            cancelLabel: "Cancel",
+            cancelAction: "Return",
+            okAction: buildBenice
+        });
+    }
+
+    /* page config */
+
+    // set popup window title properly
+    $(document).prop("title","TIP - Generate RSNs for $om.getLabel()");
+
+    $(document).ready(function(){
+        // set display height and width according to popup size
+        $("#pipeline_modal").width($(window).width());
+        $("#pipeline_modal").height($(window).height());
+        $("#pipeline_modal .body").height($(window).height()-$("#pipeline_modal .footer").height());
+
+        // hijack the form submit button and use the xmodal footer submit button instead.
+        $("#button-submit").on("click",function(){
+            confirmBuild();
+        });
+
+    });
+
+})();
+
+</script>
+
+<!-- create an xmodal container inside the popup window -->
+<div id="pipeline_modal" class="pipemodal xmodal fixed embedded">
+    <div class="body content scroll">
+
+
+        <!-- handle error messages -->
+        #if ($data.message)
+            <div class="error">$data.message</div>
+        #end
+
+        <div class="inner">
+            <!-- modal body start -->
+
+            <form name="RSNGenOptions" method="post" onsubmit="return validate();" class="optOutOfXnatDefaultFormValidation">
+                <h2>Generate RSNs for $om.getLabel()</h2>
+
+                <fieldset>
+                    <p>Select a single structural (T1 pre-contrast) series.</p>
+                    <div class="label-container"><label for="mprs">T1</label></div>
+                    <div class="input-container">
+                        <select name="mprs">
+                            <option value>Select a scan</option>
+                            #foreach ($scan in $mrScans)
+                                <option value="$scan.Id">$scan.Id ($!scan.getType())</option>
+                            #end
+                        </select>
+                    </div>
+                    <div class="helptext-container" id="mprs-helptext"></div>
+                </fieldset>
+
+                <fieldset>
+                    <p>Select one or more BOLD series</p>
+                    <div class="label-container"><label for="fstd">BOLD</label></div>
+                    <div class="input-container">
+                        #foreach ($scan in $boldScans)
+                            <p><label><input class="fstd-clicker" type="checkbox" value="$scan.Id"> $scan.Id ($!scan.getType())</label></p>
+                        #end
+                    </div>
+                    <div class="helptext-container" id="fstd-helptext"></div>
+                    <input name="fstd" value="" type="hidden" />
+                </fieldset>
+
+                <script>
+                    jq('input.fstd-clicker').on('click',function(){
+                        var clickedVals = [];
+                        jq('input.fstd-clicker:checked').each(function(){
+                            clickedVals.push($(this).val());
+                        });
+                        jq('input[name=fstd]').val(clickedVals.join());
+                    });
+
+                    // get filters from project config, update helptext if found.
+                    jq.getJSON('/data/projects/$project/config/params/mr_scan_types?format=json')
+                            .success(function(data){
+                                var filterText = data.ResultSet.Result[0].contents;
+                                if (filterText.length > 0) {
+                                    var helpText = "Only scans matching the filter [" + filterText + "] are displayed. This can be changed in pipeline configuration for this project.";
+                                    jq('#mprs-helptext').text(helpText);
+                                }
+                            });
+
+                    jq.getJSON('/data/projects/$project/config/params/bold_scan_types?format=json')
+                            .success(function(data){
+                                var filterText = data.ResultSet.Result[0].contents;
+                                if (filterText.length > 0) {
+                                    var helpText = "Only scans matching the filter [" + filterText + "] are displayed. This can be changed in pipeline configuration for this project.";
+                                    jq('#fstd-helptext').text(helpText);
+                                }
+                            });
+                </script>
+
+                <fieldset>
+                    <p>Advanced Parameters <a href="#" class="toggleLink" onclick="$('#advancedParams').toggle()">Show/Hide</a></p>
+                    <div id="advancedParams" style="display: none;">
+                        #foreach ($param in $advancedParams.keySet())
+                            ##<p>$param</p>
+                            #set ($val = $advancedParams.get($param))
+                            <p>
+                                <span class="label-container"><label for="$param">$param</label></span>
+                                <span class="input-container">
+                                    <input name="$param" type="text" value="$val" />
+                                </span>
+                            </p>
+                        #end
+                    </div>
+                </fieldset>
+
+                <input type="hidden" name="subject" value="$om.getSubjectId()" /> <!-- Subject accession ID -->
+
+                <div class="hidden">
+                    <input type="submit" name="eventSubmit_doBenice" value="Queue Job" id="submitForm"> <!-- calls Benice pipeline handler -->
+                </div>
+
+            </form>
+
+            <!-- modal body end -->
+        </div>
+    </div>
+    <div class="footer">
+        <!-- multi-panel controls are placed in footer -->
+        <div class="inner">
+            <span class="buttons">
+                <a class="cancel close button" href="javascript:self.close()">Cancel</a>
+                <a id="button-submit" class="default button" href="javascript:">Submit Pipeline</a>
+            </span>
+        </div>
+    </div>
+</div>
+<!-- end of xmodal container -->
