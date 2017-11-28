@@ -16,15 +16,17 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
         createQcSlider(jq('#rsn-qc-images'));
 
 		// initialize subjectID values
-        jq.getJSON('/REST/experiments/$sessionId?format=json')
-                .done(function(data){
-                    var subjectId = data.items[0].data_fields.subject_ID;
-					jq.data(jq('#acceptQc'),'subjectid',subjectId);
-					jq.data(jq('#rejectQc'),'subjectid',subjectId);
+        XNAT.xhr.getJSON({
+			url: XNAT.url.rootUrl('/REST/experiments/$sessionId?format=json'),
+			success: function(data){
+                var subjectId = data.items[0].data_fields.subject_ID;
+                jq.data(jq('#acceptQc'),'subjectid',subjectId);
+                jq.data(jq('#rejectQc'),'subjectid',subjectId);
 
-                    jq('#acceptQc').removeClass('hidden');
-                    jq('#rejectQc').removeClass('hidden');
-				});
+                jq('#acceptQc').removeClass('hidden');
+                jq('#rejectQc').removeClass('hidden');
+            }
+        });
 
 		// initialize tabs
         function summaryIndexChanged(){
@@ -96,8 +98,6 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
                             <p>QC Assessor requires validation. </p>
 						#end
                             <p style="margin-top: 1em;">
-                            ##    <button id="acceptQc" class="btn hidden" onclick="TIP.setValidationStatus(this,'setValidationStatusForm')" data-status="Passed" data-projectId="$project" data-subjectId="$!subject.getId()" data-sessionId="$sessionId" data-assessorId="$om.getId()"><span class="icon icon-sm icon-check-blue"></span> Accept QC</button>
-                            ##    <button id="rejectQc" class="btn hidden" onclick="TIP.setValidationStatus(this,'setValidationStatusForm')" data-status="Failed" data-projectId="$project" data-subjectId="$!subject.getId()" data-sessionId="$sessionId" data-assessorId="$om.getId()"><span class="icon icon-sm icon-cancel"></span> Reject QC</button>
                             	<button class="btn btn2" onclick="window.location.assign('/app/action/XDATActionRouter/xdataction/edit/search_element/tip%3AbeniceQc/search_field/tip%3AbeniceQc.id/search_value/$!item.getStringProperty("tip:beniceQc/ID")/popup/false/project/$om.getProject()')">Set QC Status</button>
 							</p>
 
@@ -204,7 +204,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 					#set($qcBoldImages=$qcBoldScan.getChildItems("bold_image"))
 					#if($qcBoldImages.size()>0)
 						#foreach($qcBoldImage in $qcBoldImages)
-							<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!qcBoldImage.getStringProperty("url")" title="$!qcBoldImage.getStringProperty("display_protocol/title")" />
+							<img src="${SITE_ROOT}/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!qcBoldImage.getStringProperty("url")" title="$!qcBoldImage.getStringProperty("display_protocol/title")" />
 						#end
 					#end
 				</div>
@@ -262,7 +262,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 			#set($fcmriImages=$item.getChildItems("tip:beniceQc/fcmri_preprocessing/fcmri_image"))
 			#if($!fcmriImages.size() > 0)
 				#foreach($fcmriImage in $fcmriImages)
-					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!fcmriImage.getStringProperty("url")" title="$!fcmriImage.getStringProperty("display_protocol/title")" />
+					<img src="${SITE_ROOT}/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!fcmriImage.getStringProperty("url")" title="$!fcmriImage.getStringProperty("display_protocol/title")" />
 				#end
 			#end
 		</div>
@@ -289,7 +289,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 			#set($regQcImages=$item.getChildItems("tip:beniceQc/registration/reg_image"))
 			#if($!regQcImages.size() > 0)
 				#foreach($regQcImage in $regQcImages)
-					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!regQcImage.getStringProperty("url")" title="$!regQcImage.getStringProperty("display_protocol/title")" />
+					<img src="${SITE_ROOT}/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!regQcImage.getStringProperty("url")" title="$!regQcImage.getStringProperty("display_protocol/title")" />
 				#end
 			#end
 		</div>
@@ -313,7 +313,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 			#set($rsnQcImages=$item.getChildItems("tip:beniceQc/RSN_QC/rsn_image"))
 			#if($!rsnQcImages.size() > 0)
 				#foreach($rsnQcImage in $rsnQcImages)
-					<img src="/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!rsnQcImage.getStringProperty("url")" title="$!rsnQcImage.getStringProperty("display_protocol/title")" />
+					<img src="${SITE_ROOT}/REST/experiments/$sessionId/assessors/$!item.getStringProperty("tip:beniceQc/ID")/$!rsnQcImage.getStringProperty("url")" title="$!rsnQcImage.getStringProperty("display_protocol/title")" />
 				#end
 			#end
 		</div>
@@ -390,8 +390,8 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 
 
     var obj={};
-    obj.uri=serverRoot + "/REST/experiments/$!om.getImagesessionId()/assessors/$!om.getId()";
-    obj.refresh = serverRoot + "/data/services/refresh/catalog?options=" + encodeURIComponent("populateStats,append,delete,checksum") + "&XNAT_CSRF=" + csrfToken + "&resource=/archive/experiments/$!om.getId()";
+    obj.uri= XNAT.url.rootUrl("/REST/experiments/$!om.getImagesessionId()/assessors/$!om.getId()");
+    obj.refresh = XNAT.url.csrfUrl("/data/services/refresh/catalog?options=" + encodeURIComponent("populateStats,append,delete,checksum") + "&resource=/archive/experiments/$!om.getId()");
     obj.objectId = "$!om.getId()";
     obj.objectType = "assessor";
     obj.categories={};

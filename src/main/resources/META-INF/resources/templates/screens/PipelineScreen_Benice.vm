@@ -55,16 +55,21 @@
 
             // collect all form parameters and submit to pipeline handler
             var params = $('form[name=RSNGenOptions]').serialize();
-            $.ajax({ url: '/REST/projects/$project/pipelines/Benice/experiments/$om.getId()?'+params, method: 'POST' })
-                .error( function(){ alert("Something went wrong,") })
-                .success( function(){
+            XNAT.xhr.ajax({ url: XNAT.url.csrfUrl('/REST/projects/$project/pipelines/Benice/experiments/$om.getId()?'+params),
+                method: 'POST',
+                fail: function(e){
+                    xmodal.alert("Something went wrong. Message: " + e.statusText)
+                },
+                success: function(){
                     xmodal.confirm({
                         content: "RSN Gen pipeline successfully queued. You will need to refresh the session page.",
                         cancelLabel: "Cancel",
                         cancelAction: "Return",
                         okAction: popupCloser
                     });
-                });
+                }
+            });
+
         } else {
             xmodal.message("Required fields are empty. Please check your inputs.");
         }
