@@ -1,8 +1,8 @@
 ##Copyright 2005 Harvard University / Howard Hughes Medical Institute (HHMI) All Rights Reserved
-    #set ($template = $data.getTemplateInfo())
-    $!template.setLayoutTemplate("/Popup_empty.vm")
+#set ($template = $data.getTemplateInfo())
+$!template.setLayoutTemplate("/Popup_empty.vm")
 
-    #set ($sessionId = $om.getLabel())
+#set ($sessionId = $om.getLabel())
 
 <!-- get Javascript Dependencies -->
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -87,7 +87,7 @@
     /* page config */
 
     // set popup window title properly
-    $(document).prop("title","TIP - Generate RSNs for $om.getLabel()");
+    $(document).prop("title","Generate RSNs for $om.getLabel()");
 
     $(document).ready(function(){
         // set display height and width according to popup size
@@ -107,7 +107,7 @@
 </script>
 
 <!-- create an xmodal container inside the popup window -->
-<div id="pipeline_modal" class="pipemodal xmodal fixed embedded">
+<div id="pipeline_modal" class="pipemodal fixed embedded">
     <div class="body content scroll">
 
 
