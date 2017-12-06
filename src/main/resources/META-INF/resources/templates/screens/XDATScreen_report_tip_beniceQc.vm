@@ -1,15 +1,15 @@
 #set ($sessionId = $!item.getStringProperty("tip:beniceQc/imageSession_ID"))
 $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
-#if ($turbineUtils.GetPassedParameter("popup", $data))
-	#set ($popup = $turbineUtils.GetPassedParameter("popup", data) )
-	#set ($popup = "false")
-#end
+
 #set ($SITE_ROOT = $content.getURI(''))
 
 <script src="$content.getURI("/scripts/tip/tipStatus.js")"></script>
 <script src="$content.getURI("/scripts/tip/qcImageSlider.js")"></script>
 <script>
 	jq(document).ready(function(){
+	    // re-initialize the RestDeleter() function
+        YAHOO.extend( RestDeleter, BasePopup, {} );
+
 		// initialize qc image sliders
         createQcSlider(jq('.movementograms'));
         createQcSlider(jq('#fcmri-qc-images'));
