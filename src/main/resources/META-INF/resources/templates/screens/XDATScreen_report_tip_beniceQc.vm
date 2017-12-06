@@ -4,6 +4,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 	#set ($popup = $turbineUtils.GetPassedParameter("popup", data) )
 	#set ($popup = "false")
 #end
+#set ($SITE_ROOT = $content.getURI(''))
 
 <script src="$content.getURI("/scripts/tip/tipStatus.js")"></script>
 <script src="$content.getURI("/scripts/tip/qcImageSlider.js")"></script>
