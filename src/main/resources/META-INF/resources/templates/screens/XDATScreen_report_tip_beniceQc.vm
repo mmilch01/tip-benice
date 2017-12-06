@@ -98,6 +98,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 						#else
                             <p>QC Assessor requires validation. </p>
 						#end
+                        #if($!item.canEdit($user))
                             <p style="margin-top: 1em;">
                             	<button class="btn btn2" onclick="window.location.assign('/app/action/XDATActionRouter/xdataction/edit/search_element/tip%3AbeniceQc/search_field/tip%3AbeniceQc.id/search_value/$!item.getStringProperty("tip:beniceQc/ID")/popup/false/project/$om.getProject()')">Set QC Status</button>
 							</p>
@@ -113,6 +114,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 								<input type="hidden" name="tip:beniceQc/validation/xnat_validationData_id" />
                                 <input type="hidden" name="tip:beniceQc/validation/status" id="tipStatusField" value="">
 							</form>
+                        #end
                     </div>
 
                     <div id="tab2">
