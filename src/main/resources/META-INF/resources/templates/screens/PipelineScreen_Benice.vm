@@ -158,7 +158,7 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
                     });
 
                     // get filters from project config, update helptext if found.
-                    jq.getJSON('/data/projects/$project/config/params/mr_scan_types?format=json')
+                    XNAT.xhr.getJSON(XNAT.url.rootUrl('/data/projects/$project/config/params/mr_scan_types?format=json'))
                             .success(function(data){
                                 var filterText = data.ResultSet.Result[0].contents;
                                 if (filterText.length > 0) {
@@ -167,7 +167,7 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
                                 }
                             });
 
-                    jq.getJSON('/data/projects/$project/config/params/bold_scan_types?format=json')
+                    XNAT.xhr.getJSON(XNAT.url.rootUrl('/data/projects/$project/config/params/bold_scan_types?format=json'))
                             .success(function(data){
                                 var filterText = data.ResultSet.Result[0].contents;
                                 if (filterText.length > 0) {

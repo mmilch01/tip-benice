@@ -11,7 +11,7 @@
         xmodal.iframe( {src: '/app/template/PipelineLaunchUtil_Benice.vm', footer: false, title: "Launch Benice", width: 700, height: 550 } );
     });
 
-    jq.getJSON('/data/projects/$project/config/params/customLauncher?format=json')
+    XNAT.xhr.getJSON(XNAT.url.rootUrl('/data/projects/$project/config/params/customLauncher?format=json'))
             .success(function(data){
                 var useCustomLauncher = data.ResultSet.Result[0].contents;
                 if (useCustomLauncher === "true") {
