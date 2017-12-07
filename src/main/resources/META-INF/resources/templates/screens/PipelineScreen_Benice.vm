@@ -55,8 +55,9 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
 
             // collect all form parameters and submit to pipeline handler
             var params = $('form[name=RSNGenOptions]').serialize();
-            XNAT.xhr.ajax({ url: XNAT.url.csrfUrl('/REST/projects/$project/pipelines/Benice/experiments/$om.getId()?'+params),
+            $.ajax({ url: XNAT.url.csrfUrl('/REST/projects/$project/pipelines/Benice/experiments/$om.getId()'),
                 method: 'POST',
+                data: params,
                 fail: function(e){
                     xmodal.alert("Something went wrong. Message: " + e.statusText)
                 },
