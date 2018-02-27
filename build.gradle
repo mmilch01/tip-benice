@@ -50,10 +50,6 @@ version pluginVersion
 
 repositories {
     mavenLocal()
-    maven {
-        url 'http://dcm4che.org/maven2'
-        name 'dcm4che Maven Repository'
-    }
     jcenter()
     mavenCentral()
     maven {
