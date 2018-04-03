@@ -5,7 +5,7 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
 #set ($sessionId = $om.getLabel())
 
 <!-- get Javascript Dependencies -->
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+##<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 
 <script language="Javascript">
 
