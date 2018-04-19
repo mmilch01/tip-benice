@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @XnatPlugin(value = "tip_plugin_benice", name = "XNAT 1.7 TIP Benice Plugin", description = "This is the XNAT 1.7 TIP Benice Plugin.",
-        entityPackages="")
+        entityPackages="",
+        dataModels = {
+            @XnatDataModel(value = "tip:beniceQc", singular = "Benice", plural = "Benices")
+        })
 public class TipBenicePlugin {
 }
