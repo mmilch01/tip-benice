@@ -191,7 +191,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 					Scan $!qcBoldScan.getStringProperty("number") -
 					$!qcBoldScan.getStringProperty("description")
 				</strong></p>
-				<table>
+				<table class="xnat-table" style="width: 100%;">
 					<tr>
 						<th>Scan</th><th>Movement (rms mm)</th><th>Movement (rms mm/frame)</th><th>Pre-fcMRI preproc SD (mode 1000 nrm)</th>
 					</tr>
@@ -233,7 +233,7 @@ $page.setTitle("QC Report: Generated RSN Networks for $sessionId")
 			</span>
 		</h2>
 
-		<table>
+		<table class="xnat-table" style="width: 100%;">
 			<tr>
 				<th>Scan</th><th>Movement (rms mm)</th><th>Movement (rms mm/frame)</th><th>Pre-fcMRI preproc SD (mode 1000 nrm)</th>
 			</tr>
