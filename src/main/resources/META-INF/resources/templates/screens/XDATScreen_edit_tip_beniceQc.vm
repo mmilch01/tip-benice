@@ -31,7 +31,7 @@ $page.setVlinkColor($ui.vlink)
     <!-- BEGIN fs:fsData/validation -->
     <h3>TIP RSN Gen Validation</h3>
 
-    <table class="xnat-table">
+    <table class="xnat-table alt1">
         <TR><th align="left">Status</th><TD>
             <select name="tip:beniceQc/validation/status">
                 <option selected disabled>Select a Status</option>
@@ -50,7 +50,7 @@ $page.setVlinkColor($ui.vlink)
         </td></TR>
         <TR><th align="left">Method</th><TD><textarea rows="5" cols="20" id="tip:beniceQc/validation/method" name="tip:beniceQc/validation/method">$!item.getStringProperty("tip:beniceQc/validation/method")</textarea></TD></TR>
         <TR><th align="left">Notes</th><TD>#xdatStringBox("tip:beniceQc/validation/notes" $item "" $vr)</TD></TR>
-        <TR><th align="left">Validated_by</th><TD>#xdatStringBox("tip:beniceQc/validation/validated_by" $item $!data.getSession().getAttribute("user").getUsername() $vr)</TD></TR>
+        <TR><th align="left">Validated_by</th><TD>#xdatStringBox("tip:beniceQc/validation/validated_by" $item $!user.getUsername() $vr)</TD></TR>
         #xdatHiddenBox("tip:beniceQc/validation/xnat_validationData_id" $item "")
         #xdatHiddenBox("tip:beniceQc/imageAssessorData/imageSession_ID" $item "" $vr)
         #xdatHiddenBox("tip:beniceQc/fcmri_preprocessing/display_protocol/table/column" $item "" $vr)
