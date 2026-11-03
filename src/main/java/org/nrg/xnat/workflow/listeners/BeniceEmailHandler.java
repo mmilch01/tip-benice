@@ -24,7 +24,7 @@ public class BeniceEmailHandler extends PipelineEmailHandlerAbst {
         if (completed(e)) {
             // standardPipelineEmailImpl(e, wrk, PIPELINE_NAME, "/screens/PipelineEmail_Benice_success.vm", "processed with "+PIPELINE_NAME_PRETTY, "processed.lst", params);
         } else if (failed(e)) {
-            standardPipelineEmailImpl(e, wrk, PIPELINE_NAME, DEFAULT_TEMPLATE_FAILURE, DEFAULT_SUBJECT_FAILURE, "processed.lst", params);
+            standardPipelineEmailImpl(e, wrk, PIPELINE_NAME, DEFAULT_SUBJECT_FAILURE, DEFAULT_TEMPLATE_FAILURE, "processed.lst", params);
         }
     }
 }

@@ -117,6 +117,8 @@ sourceSets {
 
 configurations {
     all*.exclude group: 'jamon'
+    all*.exclude group: 'javax.sql', module: 'jdbc-stdext'
+    all*.exclude group: 'javax.transaction', module: 'jta'    
 }
 
 dependencyManagement.imports {

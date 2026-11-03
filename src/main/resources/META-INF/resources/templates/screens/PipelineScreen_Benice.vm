@@ -58,7 +58,7 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
             $.ajax({ url: XNAT.url.csrfUrl('/REST/projects/$project/pipelines/Benice/experiments/$om.getId()'),
                 method: 'POST',
                 data: params,
-                fail: function(e){
+                error: function(e){
                     xmodal.alert("Something went wrong. Message: " + e.statusText)
                 },
                 success: function(){
