@@ -172,7 +172,7 @@
 		<DisplayFieldRef id="FCMRI_PREPROCESSING_DISPLAY_PROTOCOL_INFO"/>
 		<DisplayFieldRef id="REGISTRATION_ATLAS"/>
 		<DisplayFieldRef id="RSN_QC_STATUS"/>
-		<DisplayFieldRef id="RSN_QC_VALIDATED_BY"/>
+		<DisplayFieldRef id="RSN_QC_VALIDATEDBY"/>
 	</DisplayVersion>
 	<DisplayVersion versionName="listing_csv" default-order-by="DATE" default-sort-order="DESC" brief-description="BeniceQc" dark-color="9999CC" light-color="CCCCFF">
 		<DisplayFieldRef id="LABEL"/>

@@ -129,7 +129,7 @@ $!template.setLayoutTemplate("/Popup_empty.vm")
                             this.inputValue = $("#param-customLauncher").find('option:selected').val();
 
                             if (this.inputValue != configData["param-customLauncher"]["currentlyStored"] ) {
-                                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+configData["param-customLauncher"].configPath+'?inbody=true&overwrite=true&XNAT_CSRF=' + window.csrfToken,
+                                YAHOO.util.Connect.asyncRequest('PUT',serverRoot+configData["param-customLauncher"].configPath+'&inbody=true&overwrite=true&XNAT_CSRF=' + window.csrfToken,
                                         {
                                             success : function() {
                                                 configData["param-customLauncher"]["currentlyStored"] = YUIDOM.get("param-customLauncher").value;
